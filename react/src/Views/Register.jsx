@@ -41,7 +41,7 @@ export default function Register(){
         <div className="login-signup-form animated fadeInDown">
         <div className="form">
         <form onSubmit={onSubmit}>
-          <h1 className="title">Signup for Free</h1>
+          <h1 className="title">Signup</h1>
             {
                 errors && <div className="alert">
                     {Object.keys(errors).map(key=>(
