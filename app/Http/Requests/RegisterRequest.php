@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
                 -> letters()
                 -> symbols()
             ],
-            'role' => 'required|in:mgr,dev',
+            'role' => 'required|in:mgr,dev,usr',
         ];
     }
 }

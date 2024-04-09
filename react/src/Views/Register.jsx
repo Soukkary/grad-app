@@ -77,6 +77,7 @@ export default function Register() {
                         <option value="">Select a role</option>
                         <option value="mgr">Project Manager</option>
                         <option value="dev">Developer</option>
+                        <option value="usr">User</option>{/* normal user */}
                     </select>
 
                     <button className="btn btn-block">Signup</button>
