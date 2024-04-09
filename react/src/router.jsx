@@ -3,6 +3,10 @@ import Register from "./Views/Register.jsx";
 import Users from "./Views/Users.jsx";
 import Guest from "./Components/Guest.jsx";
 import Login from "./Views/Login.jsx";
+import Dash from "./Views/Userdashboard/Dash.jsx";
+import Jobs from "./Views/Userdashboard/Jobs.jsx";
+
+
 const router = createBrowserRouter([
    {
     path: '/',
@@ -16,7 +20,17 @@ const router = createBrowserRouter([
            {
             path: '/login',
             element: <Login/>
-           }
+           },
+           {
+            path: '/dashboard',
+            element: <Dash/>,
+            },
+           {
+            path:'/jobs',
+            element:<Jobs/>
+        }
+
+           
 
     ]
    } 

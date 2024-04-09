@@ -1,12 +1,19 @@
-import './App.css'
+import Register from './Views/Register'
+import './index.css'
+import Dash from './Views/Userdashboard/Dash'
+import Login from './Views/Login'
+import Jobs from './Views/Userdashboard/Jobs'
+
+
 
 function App() {
-  
+
 
   return (
-    <div className="App">
-      App
-      </div>
+
+  f
+
+
   )
 }
 

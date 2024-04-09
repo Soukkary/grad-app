@@ -1,23 +1,38 @@
 import axios from "axios";
-const axiosClient= axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
 
+const axiosClient = axios.create({
+    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
 });
 
-axiosClient.interceptors.request.use((config)=>{
-    const token = localStorage.getItem('ACCESS_TOKEN')
-    config.headers.Authorization = 'Bearer ${token}'
+axiosClient.interceptors.request.use(async (config) => {
+    // Fetch CSRF token from your Laravel backend
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sanctum/csrf-cookie`);
+    // Include CSRF token in the headers
+    config.headers['X-XSRF-TOKEN'] = response.data.csrf_token;
+    
+    // Include authorization token if available
+    const token = localStorage.getItem('ACCESS_TOKEN');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
-})
-axiosClient.interceptors.response.use((response) => {
-    return response;
+});
 
-},(error)=>{
-    const {response}= error;
-    if (response.status == 401){
-        localStorage.removeItem('ACCESS_TOKEN')
-    }// else handle other errors like 404 not found
+axiosClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const { response } = error;
+        if (response && response.status === 401) {
+            localStorage.removeItem('ACCESS_TOKEN');
+        }
+        else
+        {
+            console.log(response);
+        }
 
-    throw error;
-})
+        throw error;
+    }
+);
+
 export default axiosClient;

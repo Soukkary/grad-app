@@ -15,10 +15,11 @@ class AuthController extends Controller
        
     }
 
-    public function register(RegisterRequest $request): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function register(RegisterRequest $request)
     {
 
         /** @var \App\Models\User $user */
+        
         $data = $request->validated();
         $user = User::create([
             'name' => $data['name'],
@@ -27,8 +28,8 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-     // $token =  $user ->createToken('main')->plainTextToken;
-       // return response(compact('user','token'));
+        $token =  $user ->createToken('main')->plainTextToken;
+        return response(compact('user','token'));
     }
 
     public function logout(Request $request)
@@ -36,5 +37,5 @@ class AuthController extends Controller
        
 
     }
-    //
+    
 }

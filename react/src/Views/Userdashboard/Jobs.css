@@ -1,0 +1,65 @@
+.job-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligns form slightly towards the top */
+    backdrop-filter: blur(5px); /* Adds blur effect to the background */
+  }
+  
+  .job-form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 50px; /* Adjust as needed to position slightly towards the top */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .job-form-content {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  .jobs-container.open {
+    transform: translateX(400px); /* Adjust the value as needed */
+  }
+  
