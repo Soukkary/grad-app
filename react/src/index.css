@@ -353,10 +353,9 @@ table > tbody > tr > td {
   align-items: center;
 }
 
-span {
-  margin-left: 16px;
-}
-
 .image {
-    margin-bottom: 30px;
+    width: 150px;
+    height: 100px;
+    margin-left: 70px;
+    margin-bottom: 20px;
 }
