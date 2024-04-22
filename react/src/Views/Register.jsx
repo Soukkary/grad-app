@@ -47,7 +47,7 @@ export default function Register() {
             <div>
                 <h1>Form Submitted Successfully!</h1>
                 {/* Render the next form or any other content here */
-                    <ProfileForm></ProfileForm> 
+                    <ProfileForm></ProfileForm>
                 }
             </div>
         );
@@ -57,6 +57,7 @@ export default function Register() {
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
+                <img className="image" src="/blueprint2.png" alt="Logo"/>
                 <form onSubmit={onSubmit}>
                     <h1 className="title">Signup</h1>
                     {errors && (

@@ -3,8 +3,8 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { SidebarData } from "./sidebardata";
-import "/Users/youssefelsoukkary/grad-app/react/src/index.css";
 import { IconContext } from "react-icons";
+import "../../index.css";
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);

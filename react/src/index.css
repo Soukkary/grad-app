@@ -356,3 +356,7 @@ table > tbody > tr > td {
 span {
   margin-left: 16px;
 }
+
+.image {
+    margin-bottom: 30px;
+}
