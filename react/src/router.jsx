@@ -5,7 +5,7 @@ import Guest from "./Components/Guest.jsx";
 import Login from "./Views/Login.jsx";
 import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
-
+import "./index.css";
 
 const router = createBrowserRouter([
    {
@@ -30,10 +30,10 @@ const router = createBrowserRouter([
             element:<Jobs/>
         }
 
-           
+
 
     ]
-   } 
+   }
    ,
    {
     path: '/users',
