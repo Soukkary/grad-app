@@ -4,32 +4,33 @@
    background-color: #e9ecef; /* Using the same color as selected nav items */
    box-shadow: 0 0 1rem rgba(0,0,0,0.15);
  }
- 
+
  /* Make it look clickable... */
  .card-clickable {
    border-radius: 7px;
    border-width: 2px;
  }
- 
- 
+
+
  /* Presentational styles */
- 
+
  body {
    background: #FFF;
    padding: 2rem;
    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
  }
- 
- .card {
-  
- }
+
+ /*.card {
+
+ }*/
+
  .grid {
    display: grid;
    grid-gap: 4rem 1rem;
    max-width: 1200px;
    margin: auto;
  }
- 
+
  @media all and (min-width: 450px) {
    .grid {
      grid-template-columns: 1fr 1fr;
