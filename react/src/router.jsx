@@ -5,6 +5,7 @@ import Guest from "./Components/Guest.jsx";
 import Login from "./Views/Login.jsx";
 import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
+import JobSearch from "./Views/JobSearch/JobSearch.jsx";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -28,11 +29,12 @@ const router = createBrowserRouter([
            {
             path:'/jobs',
             element:<Jobs/>
-        }
-
-
-
-    ]
+            },
+            {
+            path: '/job-search',
+            element: <JobSearch/>,
+            },
+        ]
    }
    ,
    {
