@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useRef, useState } from "react";
 import { useStateContext } from "../Contexts/ContextProvider";
 import axiosClient from "../Views/axios-client";
-import '../index.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 export default function Login() {
 
@@ -52,11 +52,11 @@ export default function Login() {
                     </div>
                     }
                     <div className="input-group">
-                        {/*<span className="input-group-addon"><i className="fa fa-envelope"></i></span>*/}
+                        <span className="input-group-addon"><i className="fa fa-envelope"></i></span>
                         <input ref={emailRef} type="email" name="email" placeholder="Email"/>
                     </div>
                     <div className="input-group">
-                        {/*<span className="input-group-addon"><i className="fa fa-lock"></i></span>*/}
+                        <span className="input-group-addon"><i className="fa fa-lock"></i></span>
                         <input ref={passRef} type="password" name="pass" placeholder="Password"/>
                     </div>
                     <button className="btn btn-block">Login</button>
