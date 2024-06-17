@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../JobSearch/NavBar/NavBar"
+import NavBar from "../JobSearch/NavBar/NavBar";
 import Value from "../JobSearch/ValueDiv/Value";
 import Search from "../JobSearch/SearchDiv/Search";
 import Jobs from "../JobSearch/JobDiv/Jobs";

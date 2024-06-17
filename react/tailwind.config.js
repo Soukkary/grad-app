@@ -6,9 +6,9 @@ module.exports = {
     './components/**/*.{js,jsx}',
     './app/**/*.{js,jsx}',
     './src/**/*.{js,jsx}',
-    "./src/**/*.{html,js}", 
+    "./src/**/*.{html,js}",
 
-    
+
   ],
   prefix: "",
   theme: {
@@ -54,6 +54,16 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'blueColor' : '#2a68ff',
+        'greyIsh' : '#f1f4f8',
+        'cardShadow' : '#f7f8f9',
+        'textColor' : '#252b36',
+      },
+      flex: {
+        '2': '2 2 0%',
+      },
+      spacing: {
+        '20': '5rem',
       },
       borderRadius: {
         lg: "var(--radius)",
