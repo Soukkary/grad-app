@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <div className="logoDiv">
               <h1 className="logo text-[25px] text-white pb-[1.5rem]">
-                <strong>Job </strong>Search
+                <strong>Gig </strong>Search
               </h1>
             </div>
             <p className="text-white pb-[13px] opacity-70 leading-7">

@@ -6,6 +6,7 @@ import Login from "./Views/Login.jsx";
 import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
 import JobSearch from "./Views/JobSearch/JobSearch.jsx";
+import GigInfo from "./Views/JobSearch/GigInfo.jsx";
 import "./index.css";
 import Notifications from "./Views/Userdashboard/Notifications.jsx";
 import ProfilePage from "./Views/Profile.jsx";
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
             
 
 
+            {
+            path: 'gig-info',
+            element: <GigInfo />
+            }
     ]
    }
    ,

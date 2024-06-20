@@ -2,6 +2,9 @@ import { Link, Navigate, redirect } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useStateContext } from "../Contexts/ContextProvider";
 import axiosClient from "../Views/axios-client";
+import 'font-awesome/css/font-awesome.min.css';
+import { FaGoogle, FaFacebookF } from 'react-icons/fa';
+import GoogleLoginButton from "../Components/GoogleLoginButton";
 
 export default function Login() {
     const emailRef = useRef();
@@ -81,6 +84,26 @@ export default function Login() {
                     <p className="text-center text-sm mt-4">
                         Not Registered? <Link to="/register" className="text-blue-500 hover:text-blue-700">Create an account</Link>
                     </p>
+
+                    <div className="relative my-4">
+                        <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">or</span>
+                        </div>
+                    </div>
+
+                    <div className="social-login-buttons mt-4">
+                        <GoogleLoginButton/>
+                        <button
+                            type="button"
+                            onClick={() => window.location.href = '/auth/facebook'}
+                            className="btn-facebook flex items-center justify-center w-full py-2 bg-blue-600 text-white rounded-lg">
+                            <FaFacebookF className="mr-2" /> Login with Facebook
+                        </button>
+                    </div>
+
                 </form>
             </div>
         </div>

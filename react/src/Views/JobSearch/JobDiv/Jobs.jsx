@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 //Imported react icons
-import { BiTimeFive } from "react-icons/bi";
+import { IoIosStar } from "react-icons/io";
 //Imported images from src/assets
-import giza from "../../../Assets/giza-systems.png";
+import giza from "../../../Assets/giza-systems.png"
 import seimens from "../../../Assets/seimens.jpg";
 import dell from "../../../Assets/dell.jpeg";
 import google from "../../../Assets/google.png";
@@ -13,112 +14,142 @@ const Data = [
   {
     id: 1,
     image: giza,
-    title: 'Web Developer',
-    time: 'Now',
-    location: 'Canada',
-    desc: '2 years experience in Full-Stack development',
-    company: 'Giza Systems'
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 2,
-    image: seimens,
-    title: 'Software Engineer',
-    time: '14Hrs',
-    location: 'Manchester',
-    desc: '4 years experience in DevOps',
-    company: 'Seimens'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 3,
-    image: dell,
-    title: 'Software Tester',
-    time: 'Now',
-    location: 'NewYork',
-    desc: '2 years experience in Software Testing',
-    company: 'Dell Technology'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 4,
-    //image: logo3,
-    title: 'Frontend Developer',
-    time: '3Days',
-    location: 'Cairo',
-    desc: '2 years experience in Frontend Development',
-    company: 'Dinamico Co.'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 5,
-    //image: logo3,
-    title: 'Backend Developer',
-    time: 'Now',
-    location: 'Leeds',
-    desc: '5 years experience in Backend Development',
-    company: 'Cairo Tech'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 6,
-    //image: logo3,
-    title: 'Full-Stack Developer',
-    time: '10Hrs',
-    location: 'Newcastle',
-    desc: '2 years experience in Full-Stack Development',
-    company: 'Software House Co.'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
     id: 7,
-    image: microsoft,
-    title: 'Requirement Engineer',
-    time: 'Now',
-    location: 'Chicago',
-    desc: '2 years experience in Requirement Analyis',
-    company: 'Microsoft'
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
   {
-    id: 8,
-    image: google,
-    title: 'UI/UX Designer',
-    time: '2Days',
-    location: 'Berlin',
-    desc: '2 years experience in UI/UX Designing',
-    company: 'Google'
+   id: 8,
+    image: giza,
+    freelancerImage: dell,
+    gigLink: '/gig-info',
+    freelancerName: 'Karim A.',
+    desc: 'Web app for specific purposes',
+    rating: 4.9,
+    reviews: 68,
+    price: 10
   },
 ]
 
 const Jobs = () => {
 
-    return (
-        <div>
-          <div className="jobContainer flex gap-20 justify-center flex-wrap items-center py-10">
+  return (
+    <div>
+      <div className="jobContainer flex gap-10 justify-center flex-wrap items-center py-10">
 
-            {
-              Data.map(({id, image, title, time, location, desc, company}) => {
-                return(
-                  //This will return a single job post based on the id
-                  <div key={id} className="group group/item singleJob w-[250px] p-[20px] bg-white rounded-[10px] hover:bg-blueColor shadow-lg shadow-greyIsh-400/700 hover:shadow-lg">
-                    <span className="flex justify-between items-center gap-4">
-                      <h1 className="text-[16px] font-semibold text-textColor group-hover:text-white">{title}</h1>
-                      <span className="flex items-center text-[#ccc] gap-1"><BiTimeFive/>{time}</span>
-                    </span>
-                    <h6 className="text-[#ccc]">{location}</h6>
-                    <p className="text-[13px] text-[#959595] pt-[20px] border-t-[2px] mt-[20px] group-hover:text-white">
-                      {desc}
-                    </p>
-                    <div className="company flex items-center gap-2">
-                      <img src={image} alt="Company Logo" className="w-[20%]"/>
-                      <span className="text-[14px] py-[1rem] block group-hover:text-white">{company}</span>
-                    </div>
-                    <button className="border-[2px] rounded-[10px] block p-[10px] w-full text-[14px] font-semibold text-textColor hover:bg-white group-hover/item:text-textColor group-hover:text-black">
-                      Apply Now
-                    </button>
+        {
+          Data.map(({ id, image, gigLink, freelancerImage, freelancerName, desc, rating, reviews, price }) => {
+            return (
+              //This will return a single job post based on the id
+              <div key={id} className="basic-gig-card w-[310px] p-4 bg-white rounded-lg shadow-lg hover:bg-blue-50">
+                  <a href={gigLink} target="_blank" rel="noopener noreferrer" aria-label="Go to gig" className="block relative">
+                      <div className="slider first-slide relative">
+                          <div className="slide-item active with-gradient" style={{ width: "auto" }}>
+                              <img src={image} alt="Gig" className="w-full h-auto rounded-t-lg" />
+                          </div>
+                      </div>
+                  </a>
+                  <div className="flex-between flex items-center mt-4">
+                      <div className="flex items-center">
+                          <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200">
+                              <img src={freelancerImage} alt={freelancerName} className="w-full h-full object-cover" />
+                          </div>
+                          <span className="ml-2 text-lg">{freelancerName}</span>
+                      </div>
                   </div>
+                  <Link to={gigLink} className="block mt-4 text-blue-600 font-light hover:underline" aria-label="Go to gig">
+                      <p className="text-gray-800">{desc}</p>
+                  </Link>
+                  <div className="mt-2 flex items-center">
+                      <div className="flex items-center text-black-500">
+                          <IoIosStar width="16" height="16" fill="currentColor" className="mr-1"/>
+                          <span className="text-[16px] font-semibold mt-0.5">{rating}</span>
+                      </div>
+                      <span className="ml-2 text-gray-500 text-sm mt-0.5">({reviews})</span>
+                  </div>
+                  <div className="mt-4 text-lg font-semibold text-gray-800">
+                      From ${price}
+                  </div>
+              </div>
 
-                )
-              })
-            }
+            )
+          })
+        }
 
-          </div>
-        </div>
-    )
-  }
+      </div>
+    </div>
+  )
+}
 
-  export default Jobs
+export default Jobs
+
