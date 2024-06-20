@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Spatie\Permission\Traits\HasRoles;
+use App\Models\Gig;
+use App\Models\Profile;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles;
 
     protected $table= 'userr';
 
@@ -48,8 +51,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
-    public function jobs()
+    public function gigs()
     {
-        return $this->hasMany(Job::class);
+        return $this->hasMany(Gig::class);
+    }
+    public function profiles()
+    {
+        return $this->hasOne(Profile::class,'user_id','id');
     }
 }

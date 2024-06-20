@@ -9,7 +9,14 @@ import JobSearch from "./Views/JobSearch/JobSearch.jsx";
 import "./index.css";
 import Notifications from "./Views/Userdashboard/Notifications.jsx";
 import ProfilePage from "./Views/Profile.jsx";
-
+import ProjectCollaborationHub from "./Views/PCH.jsx";
+import HomePage from "./Views/Homepage/Homepage.jsx";
+import ProfileForm from "./Views/ProfileForm.jsx";
+import { useStateContext } from './Contexts/ContextProvider';
+const ProtectedRoute = ({ element }) => {
+    const { token } = useStateContext();
+    return token ? element : <Navigate to="/login" />;
+};
 const router = createBrowserRouter([
    {
     path: '/',
@@ -31,8 +38,29 @@ const router = createBrowserRouter([
            {
             path:'/jobs',
             element:<Jobs/>
-        }
-
+        },
+        {
+            path:'/home',
+            element:<HomePage/>
+        },
+        {
+            path:'/profilepage/:userId',
+            element:<ProfilePage/>
+        },
+        {
+            path: '/job-search',
+            element: <JobSearch/>,
+            },
+            {
+                path: '/PCH',
+                element:<ProjectCollaborationHub></ProjectCollaborationHub>
+            }
+            ,
+            {
+                path:"/profileform",
+                element:<ProfileForm />
+            }
+            
 
 
     ]
@@ -44,5 +72,6 @@ const router = createBrowserRouter([
    },
 
 
-])
+]
+)
 export default router;

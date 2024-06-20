@@ -1,73 +1,88 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate, redirect } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useStateContext } from "../Contexts/ContextProvider";
 import axiosClient from "../Views/axios-client";
-import 'font-awesome/css/font-awesome.min.css';
 
 export default function Login() {
-
     const emailRef = useRef();
     const passRef = useRef();
-    const [errors, setErrors] = useState(null)
-    const {setUser, setToken} = useStateContext()
+    const [errors, setErrors] = useState(null);
+    const { setUser, setToken } = useStateContext();
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
 
     const onSubmit = (ev) => {
-        ev.preventDefault()
+        ev.preventDefault();
         const payload = {
             email: emailRef.current.value,
             password: passRef.current.value,
-        }
-        setErrors(null)   //To resit error messages
-        axiosClient.post('/login', payload)
-        .then(({data}) => {
-            setUser(data.user)
-            setToken(data.token)
-        })
-        .catch(err => {
-            const response = err.response;
-            if(response && response.status == 422) {    //422 means validation/processing error
-                if(response.data.errors) {
-                    setErrors(response.data.errors);
-                } else {
-                    setErrors({
-                        email: [response.data.message]
-                    })
-                }
-            }
-        })
-    }
-
-    return(
-        <div className="login-signup-form animated fadeInDown">
-            <div className="form">
-                <img className="image" src="/blueprint2.png" alt="Logo"/>
-                <form onSubmit={onSubmit}>
-                    <h1 className="title">
-                        Login into your account
-                    </h1>
-                    {errors && <div className="alert">
-                        {Object.keys(errors).map(key => (
-                            <p key={key}>{errors[key][0]}</p>
-                        ))}
-                    </div>
+        };
+        setErrors(null); // To reset error messages
+        axiosClient
+            .post('/login', payload)
+            .then(({ data }) => {
+                setUser(data.user);
+                setToken(data.token);
+                setIsLoggedIn(true); // Set login state to true upon successful login
+            })
+            .catch(err => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    if (response.data.errors) {
+                        setErrors(response.data.errors);
+                    } else {
+                        setErrors({
+                            email: [response.data.message]
+                        });
                     }
-                    <div className="input-group">
-                        <span className="input-group-addon"><i className="fa fa-envelope"></i></span>
-                        <input ref={emailRef} type="email" name="email" placeholder="Email"/>
+                }
+            });
+            
+    };
+    if (isLoggedIn) {
+        return <Navigate to="/dashboard" />;
+    }
+    return (
+        
+        <div className="login-signup-form animated fadeInDown flex justify-center items-centerß min-h-screen">
+            <div className="form w-full max-w-md bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <img className="mx-auto h-16" src="/blueprint2.png" alt="Logo" />
+                <form onSubmit={onSubmit}>
+                    <h1 className="text-center text-xl font-semibold mb-4">Login into your account</h1>
+                    {errors && (
+                        <div className="mb-4">
+                            {Object.keys(errors).map(key => (
+                                <p key={key} className="text-red-500 text-xs italic">{errors[key][0]}</p>
+                            ))}
+                        </div>
+                    )}
+                    <div className="mb-4">
+                        <div className="flex items-center">
+                            <span className="mr-2"><i className="fa fa-envelope"></i></span>
+                            <input ref={emailRef} type="email" name="email" placeholder="Email"
+                                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        </div>
                     </div>
-                    <div className="input-group">
-                        <span className="input-group-addon"><i className="fa fa-lock"></i></span>
-                        <input ref={passRef} type="password" name="pass" placeholder="Password"/>
+                    <div className="mb-6">
+                        <div className="flex items-center">
+                            <span className="mr-2"><i className="fa fa-lock"></i></span>
+                            <input ref={passRef} type="password" name="pass" placeholder="Password"
+                                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
+                        </div>
                     </div>
-                    <button className="btn btn-block">Login</button>
-                    <p className="message">
-                        <Link to="#">Forgot Password?</Link>
+                    <div className="mb-6">
+                        <button type="submit"
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                            Login
+                        </button>
+                    </div>
+                    <p className="text-center text-sm">
+                        <Link to="#" className="text-blue-500 hover:text-blue-700">Forgot Password?</Link>
                     </p>
-                    <p className="message">
-                        Not Registered? <Link to="/register">Create an account</Link>
+                    <p className="text-center text-sm mt-4">
+                        Not Registered? <Link to="/register" className="text-blue-500 hover:text-blue-700">Create an account</Link>
                     </p>
                 </form>
             </div>
         </div>
-    )
+    );
 }

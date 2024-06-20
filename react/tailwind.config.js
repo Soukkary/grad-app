@@ -19,8 +19,13 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    
     extend: {
       colors: {
+        'blueColor' : '#2a68ff',
+            'greyIsh' : '#f1f4f8',
+            'cardShadow' : '#f7f8f9',
+            'textColor' : '#252b36',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -54,6 +59,16 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      height:{
+        '100': '25rem',   // 400px
+        '104': '26rem',   // 416px
+        '108': '27rem',   // 432px
+        '112': '28rem', 
+        '128': '32rem',  // 512px
+        '144': '36rem',  // 576px
+        '160': '40rem',  // 640px
+        '192': '48rem',
       },
       borderRadius: {
         lg: "var(--radius)",

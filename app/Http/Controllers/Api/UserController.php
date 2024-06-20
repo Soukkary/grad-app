@@ -18,11 +18,13 @@ class UserController extends Controller
     */
     public function index()
     {
-        return UserResource::collection(
-            User::query()->orderBy('id','desc')->paginate(10)
-        );
-    }
+        // Fetch users with their profiles using left join
+        $users = User::leftJoin('profiles', 'userr.id', '=', 'profiles.user_id')
+                    ->select('userr.*', 'profiles.profile_pic', 'profiles.fields')
+                    ->get();
 
+        return response()->json($users);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -37,10 +39,27 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
-        //
+    public function show($userId)
+{
+    $user = User::with('profiles')->find($userId);
+
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
     }
+
+    $profiles = $user->profiles;
+
+    return response()->json([
+        'name' => $user->name,
+        'initials' => strtoupper(substr($user->name, 0, 2)),
+        'title' => $profiles->fields,
+        
+        'skills' => $profiles->skills, // assuming this is a collection or array
+        'experience' => $profiles->experience, // assuming this is a collection or array
+         // assuming this is a collection or array
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
