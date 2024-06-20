@@ -3,23 +3,35 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class Cors
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
-        return $next($request)
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Access-Control-Allow-Methods', '*')
-        ->header('Access-Control-Allow-Headers',' Content-Type', 'Authorization', 'X-Requested-With')
-        ->header('Access-Control-Allow-Credentials',' true');
-}
-    }
+        // Headers you want to allow
+        $headers = [
+            'Access-Control-Allow-Origin'      => '*',
+            'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS, PUT, DELETE',
+            'Access-Control-Allow-Credentials' => 'true',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-CSRF-TOKEN, Origin, Accept, Accept-Language, Cache-Control, If-None-Match, If-Match, Range, User-Agent, Cookie, Referer, Sec-Fetch-Dest, Sec-Fetch-Mode, Sec-Fetch-Site',
 
+        ];
+
+        // Handle preflight OPTIONS requests
+        if ($request->getMethod() === 'OPTIONS') {
+            // Send an empty response with 200 status code
+            return response()->json('OK', 200, $headers);
+        }
+
+        // Pass the request to the next middleware
+        $response = $next($request);
+
+        // Add headers to the response
+        foreach ($headers as $key => $value) {
+            $response->header($key, $value);
+        }
+
+        // Return the response
+        return $response;
+    }
+}

@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Models\User;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Api\SocialiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +23,12 @@ Route::get('/', function () {
 });
 Route::post('/register', 'AuthController@register');
 Auth::routes(['verify'=>true]);
+
+Route::get('auth/google', [SocialiteController::class, 'redirectToGoogle']);
+Route::get('auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
+
+Route::get('auth/facebook', [SocialiteController::class, 'redirectToFacebook']);
+Route::get('auth/facebook/callback', [SocialiteController::class, 'handleFacebookCallback']);
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function() {
     Route::match(['get', 'post'], 'login', [AdminController::class, 'login']);
