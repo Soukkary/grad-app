@@ -49,7 +49,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Illuminate\Http\Middleware\HandleCors::class,
-            \App\Http\Middleware\Cors::class,
+            
             \Illuminate\Session\Middleware\StartSession::class, // Add this for session support
             \App\Http\Middleware\Cors::class, // Ensure CORS middleware is applied
         ],
