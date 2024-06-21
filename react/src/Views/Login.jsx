@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom"
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useStateContext } from "../Contexts/ContextProvider";
 import axiosClient from "../Views/axios-client";
 import 'font-awesome/css/font-awesome.min.css';
 import { FaGoogle, FaFacebookF } from 'react-icons/fa';
-import GoogleLoginButton from "../Components/GoogleLoginButton";
 
 export default function Login() {
 
@@ -39,11 +38,30 @@ export default function Login() {
         })
     }
 
+    const [loginUrl, setLoginUrl] = useState(null);
+
+    useEffect(() => {
+        fetch('http://localhost:8000/api/auth/google', {
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Something went wrong!');
+            })
+            .then((data) => setLoginUrl( data.url ))
+            .catch((error) => console.error(error));
+    }, []);
+
     return(
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
                 <img className="image" src="/blueprint2.png" alt="Logo"/>
-                <form onSubmit={onSubmit}>
+                <form>
                     <h1 className="title">
                         Login into your account
                     </h1>
@@ -61,7 +79,7 @@ export default function Login() {
                         <span className="input-group-addon"><i className="fa fa-lock"></i></span>
                         <input ref={passRef} type="password" name="pass" placeholder="Password"/>
                     </div>
-                    <button className="btn btn-block">Login</button>
+                    <button onSubmit={onSubmit} className="btn btn-block">Login</button>
 
                     <p className="message">
                         <Link to="#">Forgot Password?</Link>
@@ -80,7 +98,14 @@ export default function Login() {
                     </div>
 
                     <div className="social-login-buttons mt-4">
-                        <GoogleLoginButton/>
+                        {loginUrl != null && (
+                            <button
+                                type="button"
+                                onClick={() => window.location.href = loginUrl}
+                                className="btn-google flex items-center justify-center w-full py-2 bg-red-600 text-white rounded-lg">
+                                <FaGoogle className="mr-2" /> Login with Google
+                            </button>
+                        )}
                         <button
                             type="button"
                             onClick={() => window.location.href = '/auth/facebook'}

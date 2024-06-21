@@ -7,6 +7,7 @@ import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
 import JobSearch from "./Views/JobSearch/JobSearch.jsx";
 import GigInfo from "./Views/JobSearch/GigInfo.jsx";
+import GoogleLoginButton from "./Components/GoogleLoginButton.jsx";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -33,11 +34,15 @@ const router = createBrowserRouter([
             },
             {
             path: '/job-search',
-            element: <JobSearch/>,
+            element: <JobSearch/>
             },
             {
             path: 'gig-info',
             element: <GigInfo />
+            },
+            {
+            path: "/auth/google",
+            element: <GoogleLoginButton />
             }
         ]
    }

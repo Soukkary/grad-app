@@ -29,17 +29,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('/users', UserController::class);
 });
 
-Route::post('/api/auth/google/callback', function (Request $request) {
-    $name = $request->input('name');
-    $email = $request->input('email');
-    // Add other user information you want to store
-
-    // Store user data in the database
-    $user = User::firstOrCreate(['email' => $email], ['name' => $name]);
-
-    return response()->json(['message' => 'User data stored successfully']);
-});
-
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
