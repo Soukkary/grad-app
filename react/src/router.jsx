@@ -14,6 +14,7 @@ import ProjectCollaborationHub from "./Views/PCH.jsx";
 import HomePage from "./Views/Homepage/Homepage.jsx";
 import ProfileForm from "./Views/ProfileForm.jsx";
 import { useStateContext } from './Contexts/ContextProvider';
+import Projects from "./Views/Userdashboard/projects.jsx";
 const ProtectedRoute = ({ element }) => {
     const { token } = useStateContext();
     return token ? element : <Navigate to="/login" />;
@@ -60,7 +61,13 @@ const router = createBrowserRouter([
             {
                 path:"/profileform",
                 element:<ProfileForm />
-            }
+            },
+            {
+                path:"/projects",
+                element:<Projects />
+            },
+            
+
             
 
 
