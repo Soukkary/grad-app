@@ -27,7 +27,7 @@ class AuthController extends Controller
  
          // Check if the password is correct
          if (!Hash::check($credentials['password'], $user->password)) {
-             return response()->json(['message' => 'Incorrect password'], 401);
+             return response()->json(['message' => 'Incorrect password'], 402);
          }
  
          // Authenticate the user
