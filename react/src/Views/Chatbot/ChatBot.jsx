@@ -5,7 +5,6 @@ import axios from "axios";
 import { saveChat, getChatHistory } from '../../Services/ChatbotService';
 import ChatbotSidebar from "../../Components/sidebar/ChatbotSidebar";
 
-//
 
 function ChatBot() {
     const [typing, setTyping] = useState(false);
