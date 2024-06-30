@@ -8,6 +8,8 @@ import Jobs from "./Views/Userdashboard/Jobs.jsx";
 import JobSearch from "./Views/JobSearch/JobSearch.jsx";
 import GigInfo from "./Views/JobSearch/GigInfo.jsx";
 import GoogleLoginButton from "./Components/GoogleLoginButton.jsx";
+import JobPortal from "./Views/JobPortal/JobPortal.jsx";
+import ChatBot from "./Views/Chatbot/ChatBot.jsx";
 import "./index.css";
 import Notifications from "./Views/Userdashboard/Notifications.jsx";
 import ProfilePage from "./Views/Profile.jsx";
@@ -55,6 +57,10 @@ const router = createBrowserRouter([
             element: <JobSearch/>
             },
             {
+            path: '/job-portal',
+            element: <JobPortal/>
+            },
+            {
                 path: '/PCH',
                 element:<ProjectCollaborationHub></ProjectCollaborationHub>
             }
@@ -75,6 +81,10 @@ const router = createBrowserRouter([
             {
             path: 'gig-info',
             element: <GigInfo />
+            },
+            {
+            path: '/chatbot',
+            element: <ChatBot/>
             },
             {
             path: "/auth/google",

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\GigController as ApiGigController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\SocialiteController;
+use App\Http\Controllers\Api\ChatHistoryController;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -31,10 +32,15 @@ function() {
         return $request->user();
 
     });
+
     Route::post('/logout',[AuthController::class,'logout']);
     Route::apiResource('/users', UserController::class);
 });
 
+Route::get('/jobs', [JobController::class, 'index']);
+Route::post('/create-job', [JobController::class,'create']);
+Route::post('/save-chat', [ChatHistoryController::class, 'saveChat']);
+Route::get('/chat-history', [ChatHistoryController::class, 'getChatHistory']);
 Route::post('/api/auth/google/callback', function (Request $request) {
     $name = $request->input('name');
     $email = $request->input('email');
