@@ -14,17 +14,23 @@ function GoogleLoginButton() {
 
         fetch(`http://localhost:8000/api/auth/google/callback${location.search}`, {
             headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
             }
         })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setLoading(false);
-                setData(data);
-            });
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            setLoading(false);
+            setData(data);
+        })
+        .catch((error) => {
+            setLoading(false);
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }, []);
 
     // Helper method to fetch User data for authenticated user

@@ -42,6 +42,8 @@ class SocialiteController extends Controller
                     'email_verified_at' => now(),
                     'name' => $socialiteUser->getName(),
                     'social_id' => $socialiteUser->getId(),
+                    'social_type' => 'google',
+                    'password' => bcrypt('karim1234'),
                 ]
             );
 

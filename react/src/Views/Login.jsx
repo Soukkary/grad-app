@@ -43,8 +43,8 @@ export default function Login() {
     useEffect(() => {
         fetch('http://localhost:8000/api/auth/google', {
             headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
             }
         })
             .then((response) => {
