@@ -57,7 +57,7 @@ class AuthController extends Controller
         ]);
     
         
-        
+        Auth::login($user);
         
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user', 'token'));

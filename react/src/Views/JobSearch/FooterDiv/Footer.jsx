@@ -1,68 +1,63 @@
 import React from "react";
-//Imported react icons
-import { AiFillInstagram } from "react-icons/ai";
+import { Box, Grid, Heading, Text, List, ListItem, Link, Flex, Icon, Stack } from "@chakra-ui/react";
+import { AiFillInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
-import { AiOutlineTwitter } from "react-icons/ai";
 
 const Footer = () => {
+  return (
+    <Box as="footer" p={{ base: 6, md: 10 }} mb={4} bg="blue.600" rounded="lg">
+      <Grid templateColumns={{ base: "1fr", md: "repeat(5, 1fr)" }} gap={8} maxW="1200px" mx="auto">
+        <Box>
+          <Heading as="h1" size="lg" color="white" pb={4}>
+            <strong>Gig </strong>Search
+          </Heading>
+          <Text color="whiteAlpha.800" pb={4}>
+            We always want our seekers and companies to find the best jobs and employers find the best candidates.
+          </Text>
+        </Box>
 
-    return (
-        <div className="footer p-[5rem] mb-4 bg-blueColor rounded-[10px] gap-8 grid grid-cols-5 m-auto items-start justify-center">
-          <div>
-            <div className="logoDiv">
-              <h1 className="logo text-[25px] text-white pb-[1.5rem]">
-                <strong>Gig </strong>Search
-              </h1>
-            </div>
-            <p className="text-white pb-[13px] opacity-70 leading-7">
-              We always want our seekers and companies find the best jobs and employers find the best candidates.
-            </p>
-          </div>
+        <Stack>
+          <Heading as="h3" size="md" color="white" pb={4}>Company</Heading>
+          <List spacing={2}>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>About Us</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Features</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>News</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>FAQs</Link></ListItem>
+          </List>
+        </Stack>
 
-          <div className="grid">
-            <span className="divTitle text-[18px] font-semibold text-white pb-[1.5rem]">Company</span>
-            <div className="grid gap-3">
-              <li className="text-white opacity-[.7] hover:opacity-[1]">About Us</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Features</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">News</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">FAQs</li>
-            </div>
-          </div>
+        <Stack>
+          <Heading as="h3" size="md" color="white" pb={4}>Resources</Heading>
+          <List spacing={2}>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Account</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Support Center</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Feedback</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Contact Us</Link></ListItem>
+          </List>
+        </Stack>
 
-          <div className="grid">
-            <span className="divTitle text-[18px] font-semibold text-white pb-[1.5rem]">Resources</span>
-            <div className="grid gap-3">
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Account</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Support Center</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Feedback</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Contact Us</li>
-            </div>
-          </div>
+        <Stack>
+          <Heading as="h3" size="md" color="white" pb={4}>Support</Heading>
+          <List spacing={2}>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Events</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Promo</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Req Demo</Link></ListItem>
+            <ListItem><Link color="whiteAlpha.700" _hover={{ color: "white" }}>Careers</Link></ListItem>
+          </List>
+        </Stack>
 
-          <div className="grid">
-            <span className="divTitle text-[18px] font-semibold text-white pb-[1.5rem]">Support</span>
-            <div className="grid gap-3">
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Events</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Promo</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Req Demo</li>
-              <li className="text-white opacity-[.7] hover:opacity-[1]">Careers</li>
-            </div>
-          </div>
+        <Stack>
+          <Heading as="h3" size="md" color="white" pb={4}>Contact Info</Heading>
+          <Text color="whiteAlpha.800" pb={4}>platform@hotmail.com</Text>
+          <Flex gap={4}>
+            <Icon as={AiFillInstagram} boxSize={10} color="blue.600" bg="white" p={2} borderRadius="full" />
+            <Icon as={BsFacebook} boxSize={10} color="blue.600" bg="white" p={2} borderRadius="full" />
+            <Icon as={AiOutlineTwitter} boxSize={10} color="blue.600" bg="white" p={2} borderRadius="full" />
+          </Flex>
+        </Stack>
+      </Grid>
+    </Box>
+  );
+}
 
-          <div className="grid">
-            <span className="divTitle text-[18px] font-semibold text-white pb-[1.5rem]">Contact Info</span>
-            <div>
-              <small className="text-[14px] text-white">platform@hotmail.com</small>
-              <div className="icons flex gap-4 py-[1rem]">
-                <AiFillInstagram className="bg-white p-[18px] h-[50px] w-[50px] rounded-full icon text-blueColor"/>
-                <BsFacebook className="bg-white p-[18px] h-[50px] w-[50px] rounded-full icon text-blueColor"/>
-                <AiOutlineTwitter className="bg-white p-[18px] h-[50px] w-[50px] rounded-full icon text-blueColor"/>
-              </div>
-            </div>
-          </div>
-
-        </div>
-    )
-  }
-
-  export default Footer
+export default Footer;

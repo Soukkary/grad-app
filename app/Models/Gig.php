@@ -10,7 +10,7 @@ class Gig extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'img', 'user_id'
+        'title', 'description', 'img', 'user_id','price'
     ];
     public function user()
     {

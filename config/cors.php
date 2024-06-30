@@ -1,4 +1,5 @@
 <?php
+<<<<<<< Updated upstream
 
 return [
 
@@ -15,10 +16,14 @@ return [
     |
     */
 
+=======
+return [
+>>>>>>> Stashed changes
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
+<<<<<<< Updated upstream
     'allowed_origins' => ['http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
@@ -32,4 +37,17 @@ return [
 
     'supports_credentials' => true,
 
+=======
+    'allowed_origins' => ['*'],
+
+    'allowed_origins_patterns' => [],
+
+    'allowed_headers' => ['*'],
+
+    'exposed_headers' => false,
+
+    'max_age' => false,
+
+    'supports_credentials' => false,
+>>>>>>> Stashed changes
 ];

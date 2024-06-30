@@ -7,12 +7,13 @@ class CreateProjectsTable extends Migration
 {
     public function up()
     {
+     
         Schema::create('projects', function (Blueprint $table) {
-            $table->id('project_id');
+            $table->id();
             $table->string('project_name');
             $table->text('description')->nullable();
-            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('img')->nullable();
             $table->foreignId('created_by')->constrained('users', 'id')->onDelete('cascade');
             $table->timestamps();
         });

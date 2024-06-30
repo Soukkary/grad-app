@@ -5,7 +5,7 @@ import Guest from "./Components/Guest.jsx";
 import Login from "./Views/Login.jsx";
 import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
-import JobSearch from "./Views/JobSearch/JobSearch.jsx";
+import JobSearch from "./Views/JobSearch/GigSearch.jsx";
 import GigInfo from "./Views/JobSearch/GigInfo.jsx";
 import GoogleLoginButton from "./Components/GoogleLoginButton.jsx";
 import JobPortal from "./Views/JobPortal/JobPortal.jsx";
@@ -18,6 +18,11 @@ import HomePage from "./Views/Homepage/Homepage.jsx";
 import ProfileForm from "./Views/ProfileForm.jsx";
 import { useStateContext } from './Contexts/ContextProvider';
 import Projects from "./Views/Userdashboard/projects.jsx";
+import App from "./Views/Chatbot/azure.jsx";
+import { ChatIcon } from "@chakra-ui/icons";
+import ForgotPassword from "./Views/ForgetPassword.jsx";
+import ChatbotPage from "./Views/Chatbot/azure.jsx";
+import ResetPassword from "./Views/resetpassword.jsx";
 const ProtectedRoute = ({ element }) => {
     const { token } = useStateContext();
     return token ? element : <Navigate to="/login" />;
@@ -73,9 +78,25 @@ const router = createBrowserRouter([
                 path:"/projects",
                 element:<Projects />
             },
+            {
+                path:"/azure",
+                element:<ChatbotPage />
+            },
+            {
+                path:"/forget-password",
+                element: <ForgotPassword></ForgotPassword>
+            },
+                {
+                    path:"/reset-password/:token", 
+                    element:<ResetPassword/>
             
 
-            
+                },
+                {
+                    path:'project/PCH/:projectId',
+                    element:<ProjectCollaborationHub></ProjectCollaborationHub>
+                },
+                
 
 
             {

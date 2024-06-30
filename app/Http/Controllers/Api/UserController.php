@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -16,11 +16,36 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     */
+    public function userDetails(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            // Add any other user details you want to return
+        ]);
+    }
+    public function indexDevsWithProfiles()
+{
+    // Fetch users with role 'dev' and their profiles
+     // Fetch users with role 'dev' and eager load their profiles
+     $users = User::where('role', 'dev')->with('profiles')->get();
+
+     // Filter out users without profiles or with issues
+     $filteredUsers = $users->filter(function ($user) {
+         return $user->profile !== null;
+     });
+
+     return response()->json($filteredUsers);
+}
     public function index()
     {
         // Fetch users with their profiles using left join
-        $users = User::leftJoin('profiles', 'userr.id', '=', 'profiles.user_id')
-                    ->select('userr.*', 'profiles.profile_pic', 'profiles.fields')
+        $users = User::where('role','=','dev')
+        ->leftJoin('profiles', 'users.id', '=', 'profiles.user_id')
+                    ->select('users.*', 'profiles.profile_pic', 'profiles.fields')
                     ->get();
 
         return response()->json($users);

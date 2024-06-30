@@ -1,7 +1,25 @@
+// ProfilePage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axiosClient from './axios-client'; // Adjust the import path as necessary
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Image,
+  Link,
+  Spinner,
+  Stack,
+  Text,
+  VStack,
+  Avatar,
+  Badge,
+  Button,
+} from '@chakra-ui/react';
+import axiosClient from '../Views/axios-client'; // Adjust the import path as necessary
+import MessagingWindow from '../Components/MessagingWindow.jsx'; // Import the new MessagingWindow component
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -14,15 +32,14 @@ const ProfilePage = () => {
   });
   const [gigs, setGigs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [profileError, setProfileError] = useState(null);
+  const [gigsError, setGigsError] = useState(null);
+  const [isMessagingOpen, setIsMessagingOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log(`Fetching user data for userId: ${userId}`);
         const response = await axiosClient.get(`/userprofile/${userId}`);
-        console.log('Response data:', response.data);
-
         const skillsArray = Array.isArray(response.data.skills)
           ? response.data.skills
           : response.data.skills.split(',').map(skill => skill.trim());
@@ -37,124 +54,140 @@ const ProfilePage = () => {
           experience: experienceArray,
         });
 
-        const gigsResponse = await axiosClient.get(`/usergigs/${userId}`);
-        setGigs(gigsResponse.data);
-
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching user data:', error);
-        setError('Error fetching user data.');
+        setProfileError('Error fetching user data.');
         setLoading(false);
       }
     };
 
+    const fetchUserGigs = async () => {
+      try {
+        const response = await axiosClient.get(`/usergigs/${userId}`);
+        setGigs(response.data);
+      } catch (error) {
+        setGigsError('Error fetching user gigs.');
+      }
+    };
+
     fetchUserData();
+    fetchUserGigs();
   }, [userId]);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="flex items-center justify-center min-h-screen">{error}</div>;
+    return (
+      <Flex align="center" justify="center" minH="100vh">
+        <Spinner size="xl" />
+      </Flex>
+    );
   }
 
   return (
-    <div className="relative min-h-screen bg-gray-100">
+    <Box minH="100vh" bg="gray.100">
       {/* Navbar */}
-      <nav className="bg-blue-600 text-white w-full shadow-lg">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold">
-            <i className="fas fa-user-circle mr-2"></i>Profile
-          </div>
-          <div className="flex space-x-4">
-            <a href="#" className="hover:text-blue-400 transition duration-300">Home</a>
-            <a href="#" className="hover:text-blue-400 transition duration-300">About</a>
-            <a href="#" className="hover:text-blue-400 transition duration-300">Contact</a>
-          </div>
-        </div>
-      </nav>
+      <Box bg="blue.600" color="white" shadow="lg">
+        <Container maxW="container.xl" py="4">
+          <Flex justify="space-between" align="center">
+            <Heading as="h1" size="lg">
+              <Box as="i" className="fas fa-user-circle" mr="2" />
+              Profile
+            </Heading>
+            <HStack spacing="4">
+              <Link href="#" _hover={{ color: 'blue.400' }}>Home</Link>
+              <Link href="#" _hover={{ color: 'blue.400' }}>About</Link>
+              <Link href="#" _hover={{ color: 'blue.400' }}>Contact</Link>
+            </HStack>
+          </Flex>
+        </Container>
+      </Box>
 
       {/* Banner and Profile Info */}
-      <div className="relative bg-white shadow-lg">
-        <img
+      <Box bg="white" shadow="lg" mb="8">
+        <Image
           src="https://source.unsplash.com/random/1200x300"
           alt="Banner"
-          className="w-full h-48 object-cover"
+          w="full"
+          h="48"
+          objectFit="cover"
         />
-        <div className="container mx-auto px-4 py-4 relative">
-          <motion.div
-            className="w-32 h-32 rounded-full bg-blue-500 flex items-center justify-center text-white text-4xl absolute -top-16 left-1/2 transform -translate-x-1/2"
-            whileHover={{ scale: 1.1 }}
-          >
-            {userData.initials}
-          </motion.div>
-          <div className="mt-20 text-center">
-            <h1 className="text-3xl font-extrabold mb-2">{userData.name}</h1>
-            <p className="text-lg text-gray-600">{userData.title}</p>
-          </div>
-        </div>
-      </div>
+        <Container maxW="container.xl" position="relative">
+          <Flex justify="center" mt="-12">
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <Avatar size="2xl" name={userData.name} src="" />
+            </motion.div>
+          </Flex>
+          <Box textAlign="center" mt="4">
+            <Heading as="h2" size="xl">{userData.name}</Heading>
+            <Text fontSize="lg" color="gray.600">{userData.title}</Text>
+            <Button mt="4" colorScheme="blue" onClick={() => setIsMessagingOpen(true)}>Message</Button>
+          </Box>
+        </Container>
+      </Box>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 flex flex-col lg:flex-row lg:space-x-8">
-        {/* Skills and Experience */}
-        <div className="w-full lg:w-1/3 lg:-ml-16 mb-8 lg:mb-0">
-          <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Skills</h2>
-            <motion.ul
-              className="list-disc list-inside space-y-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-            >
-              {userData.skills.map((skill, index) => (
-                <motion.li key={index} className="text-lg bg-blue-100 p-2 rounded-md" whileHover={{ scale: 1.05 }}>
-                  {skill}
-                </motion.li>
-              ))}
-            </motion.ul>
-          </div>
+      <Container maxW="container.xl" py="8">
+        <Stack direction={{ base: 'column', lg: 'row' }} spacing="4">
+          {/* Skills and Experience */}
+          <VStack flexBasis="33.33%" spacing="8">
+            <Box bg="white" shadow="lg" rounded="lg" p="6" w="full">
+              <Heading as="h3" size="lg" mb="4">Skills</Heading>
+              <VStack align="start">
+                {userData.skills.map((skill, index) => (
+                  <Badge key={index} colorScheme="blue" px="4" py="2" rounded="md">
+                    {skill}
+                  </Badge>
+                ))}
+              </VStack>
+            </Box>
 
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4">Experience</h2>
-            <div className="space-y-6">
-              {userData.experience.map((job, index) => (
-                <motion.div
-                  key={index}
-                  className="p-6 rounded-lg shadow-md bg-gray-50 hover:bg-gray-100 transition duration-300"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <h3 className="font-semibold text-xl mb-2">{job.title}</h3>
-                  <p className="text-gray-600">{job.period}</p>
-                  <p>{job.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
+            <Box bg="white" shadow="lg" rounded="lg" p="6" w="full">
+              <Heading as="h3" size="lg" mb="4">Experience</Heading>
+              <VStack align="start" spacing="6">
+                {userData.experience.map((job, index) => (
+                  <Box key={index} p="4" bg="gray.50" rounded="lg" shadow="md" w="full">
+                    <Heading as="h4" size="md" mb="2">{job.title}</Heading>
+                    <Text color="gray.600" mb="2">{job.period}</Text>
+                    <Text>{job.description}</Text>
+                  </Box>
+                ))}
+              </VStack>
+            </Box>
+          </VStack>
 
-        {/* Gigs */}
-        <div className="w-full lg:w-2/3">
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4">Gigs</h2>
-            <div className="space-y-6">
-              {gigs.map((gig, index) => (
-                <motion.div
-                  key={index}
-                  className="p-6 rounded-lg shadow-md bg-gray-50 hover:bg-gray-100 transition duration-300"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <h3 className="font-semibold text-xl mb-2">{gig.title}</h3>
-                  <p className="text-gray-600">{gig.period}</p>
-                  <p>{gig.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          {/* Gigs */}
+          {gigs.length > 0 ? (
+            <Box flexBasis="66.67%" bg="white" shadow="lg" rounded="lg" p="6">
+              <Heading as="h3" size="lg" mb="4">Gigs</Heading>
+              <VStack spacing="6">
+                {gigs.map((gig, index) => (
+                  <Box key={index} p="4" bg="gray.50" rounded="lg" shadow="md" w="full">
+                    <Heading as="h4" size="md" mb="2">{gig.title}</Heading>
+                    <Text color="gray.600" mb="2">{gig.period}</Text>
+                    <Text>{gig.description}</Text>
+                  </Box>
+                ))}
+              </VStack>
+            </Box>
+          ) : (
+            <Box flexBasis="66.67%" bg="white" shadow="lg" rounded="lg" p="6">
+              <Heading as="h3" size="lg" mb="4">Gigs</Heading>
+              <Text>No gigs available</Text>
+            </Box>
+          )}
+        </Stack>
+      </Container>
+
+      {/* Messaging Window */}
+      {isMessagingOpen && (
+        <Box position="fixed" bottom="4" right="4" w="96" h="96" zIndex="1000">
+          <MessagingWindow
+            recipientId={userId}
+            recipientName={userData.name}
+            onClose={() => setIsMessagingOpen(false)}
+          />
+        </Box>
+      )}
+    </Box>
   );
 };
 

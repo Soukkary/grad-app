@@ -12,7 +12,9 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Gig;
 use App\Models\Profile;
-class User extends Authenticatable implements MustVerifyEmail
+use Illuminate\Contracts\Auth\CanResetPassword;
+
+class User extends Authenticatable implements CanResetPassword
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
@@ -62,4 +64,41 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Profile::class,'user_id','id');
     }
+     /**
+     * Get the projects created by the user.
+     */
+    public function createdProjects()
+    {
+        return $this->hasMany(Project::class, 'created_by');
+    }
+
+    /**
+     * The projects that the user is assigned to.
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id')
+                    ->using(ProjectUser::class)
+                    ->withTimestamps();
+    }
+    
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get the messages received by the user.
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
+    // app/Models/User.php
+
+public function developerRequests()
+{
+    return $this->hasMany(ProjectDeveloperRequest::class, 'developer_id');
+}
+
 }

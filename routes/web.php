@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Http\Controllers\Api\SocialiteController;
-
+use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes

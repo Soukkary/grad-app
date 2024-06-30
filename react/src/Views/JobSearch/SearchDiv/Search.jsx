@@ -1,73 +1,135 @@
 import React from "react";
-//Imported react icons
-import { AiOutlineSearch } from "react-icons/ai";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { Box, Flex, Input, IconButton, Button, Select, FormControl, FormLabel, Stack } from "@chakra-ui/react";
+import { AiOutlineSearch, AiOutlineCloseCircle } from "react-icons/ai";
 import { BsHouseDoor } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 
 const Search = () => {
+  return (
+    <Box className="searchDiv" bg="gray.100" rounded="lg" p={{ base: 4, md: 12 }} mb={4}>
+      <form>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          justify="space-between"
+          align="center"
+          rounded="md"
+          gap={{ base: 4, md: 4 }}
+          bg="white"
+          p={5}
+          boxShadow="lg"
+        >
+          <Flex gap={4} align="center" w="100%">
+            <IconButton
+              icon={<AiOutlineSearch />}
+              aria-label="Search job"
+              size="lg"
+              variant="ghost"
+            />
+            <Input
+              type="text"
+              placeholder="Search Job Here..."
+              variant="unstyled"
+              color="blue.500"
+              flex="1"
+            />
+            <IconButton
+              icon={<AiOutlineCloseCircle />}
+              aria-label="Clear search"
+              size="lg"
+              variant="ghost"
+              color="gray.400"
+              _hover={{ color: "gray.600" }}
+            />
+          </Flex>
+          <Flex gap={4} align="center" w="100%">
+            <IconButton
+              icon={<BsHouseDoor />}
+              aria-label="Search by company"
+              size="lg"
+              variant="ghost"
+            />
+            <Input
+              type="text"
+              placeholder="Search By Company..."
+              variant="unstyled"
+              color="blue.500"
+              flex="1"
+            />
+            <IconButton
+              icon={<AiOutlineCloseCircle />}
+              aria-label="Clear search"
+              size="lg"
+              variant="ghost"
+              color="gray.400"
+              _hover={{ color: "gray.600" }}
+            />
+          </Flex>
+          <Flex gap={4} align="center" w="100%">
+            <IconButton
+              icon={<CiLocationOn />}
+              aria-label="Search by location"
+              size="lg"
+              variant="ghost"
+            />
+            <Input
+              type="text"
+              placeholder="Search By Location..."
+              variant="unstyled"
+              color="blue.500"
+              flex="1"
+            />
+            <IconButton
+              icon={<AiOutlineCloseCircle />}
+              aria-label="Clear search"
+              size="lg"
+              variant="ghost"
+              color="gray.400"
+              _hover={{ color: "gray.600" }}
+            />
+          </Flex>
+          <Button colorScheme="blue" p={5} px={10} rounded="md">
+            Search
+          </Button>
+        </Flex>
+      </form>
 
-    return (
-        <div className="searchDiv flex-row gap-10 bg-greyIsh rounded-[10px] p-[3rem]">
+      <Flex direction={{ base: "column", md: "row" }} mt={14} gap={4} justify="center" align="center">
+        <FormControl id="relevance" w={{ base: "100%", md: "auto" }}>
+          <FormLabel color="gray.600" fontWeight="semibold">Sort by:</FormLabel>
+          <Select placeholder="Choose Option" bg="white">
+            <option value="Relevance">Relevance</option>
+            <option value="Inclusive">Inclusive</option>
+            <option value="Starts With">Starts With</option>
+            <option value="Contains">Contains</option>
+          </Select>
+        </FormControl>
 
-          <form action="">
-            <div className="firstDiv flex justify-between items-center rounded-[8px] gap-[10px] bg-white p-5  shadow-lg shadow-greyIsh-700">
-              <div className="flex gap-6 items-center">
-                <AiOutlineSearch className="text-[25px] icon"/>
-                <input type="text" className="bg-transparent text-blue-500 focus:outline-none w-[100%]" placeholder="Search Job Here..."/>
-                <AiOutlineCloseCircle className="text-[30px] text-[#a5a6a6] hover:text-textColor icon"/>
-              </div>
-              <div className="flex gap-2 items-center">
-                <BsHouseDoor className="text-[25px] icon"/>
-                <input type="text" className="bg-transparent text-blue-500 focus:outline-none w-[100%]" placeholder="Search By Company..."/>
-                <AiOutlineCloseCircle className="text-[30px] text-[#a5a6a6] hover:text-textColor icon"/>
-              </div>
-              <div className="flex gap-2 items-center">
-                <CiLocationOn className="text-[25px] icon"/>
-                <input type="text" className="bg-transparent text-blue-500 focus:outline-none w-[100%]" placeholder="Search By Location..."/>
-                <AiOutlineCloseCircle className="text-[30px] text-[#a5a6a6] hover:text-textColor icon"/>
-              </div>
-              <button className="bg-blueColor h-full p-5 px-10 rounded-[10px] text-white cursor-pointer hover:bg-blue-300">Search</button>
-            </div>
-          </form>
+        <FormControl id="type" w={{ base: "100%", md: "auto" }}>
+          <FormLabel color="gray.600" fontWeight="semibold">Type:</FormLabel>
+          <Select placeholder="Choose Option" bg="white">
+            <option value="Full-Time">Full-Time</option>
+            <option value="Remote">Remote</option>
+            <option value="Contract">Contract</option>
+            <option value="Part-Time">Part-Time</option>
+          </Select>
+        </FormControl>
 
-          <div className="secDiv flex mt-14  items-center gap-10 justify-center ">
-            <div className="singleSearch flex items-center gap-2">
-              <label htmlFor="relevance" className="text-[#808080] font-semibold">Sort by: </label>
-              <select name="sort-by" id="relevance" className="bg-white rounded-[3px] px-4 py-1">
-                <option selected disabled>Choose Option</option>
-                <option value="Relevance">Relevance</option>
-                <option value="Inclusive">Inclusive</option>
-                <option value="Starts With">Starts With</option>
-                <option value="Contains">Contains</option>
-              </select>
-            </div>
-            <div className="singleSearch flex items-center gap-2">
-              <label htmlFor="type" className="text-[#808080] font-semibold">Type: </label>
-              <select name="type" id="type" className="bg-white rounded-[3px] px-4 py-1">
-              <option selected disabled>Choose Option</option>
-                <option value="Full-Time">Full-Time</option>
-                <option value="Remote">Remote</option>
-                <option value="Contract">Contract</option>
-                <option value="Part-Time">Part-Time</option>
-              </select>
-            </div>
-            <div className="singleSearch flex items-center gap-2">
-              <label htmlFor="level" className="text-[#808080] font-semibold">Level: </label>
-              <select name="level" id="level" className="bg-white rounded-[3px] px-4 py-1">
-              <option selected disabled>Choose Option</option>
-                <option value="Senior">Senior</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advocate">Advocate</option>
-              </select>
-            </div>
+        <FormControl id="level" w={{ base: "100%", md: "auto" }}>
+          <FormLabel color="gray.600" fontWeight="semibold">Level:</FormLabel>
+          <Select placeholder="Choose Option" bg="white">
+            <option value="Senior">Senior</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advocate">Advocate</option>
+          </Select>
+        </FormControl>
 
-            <span className="text-[#a1a1a1] cursor-pointer">Clear All</span>
-          </div>
+        <Button variant="link" color="gray.400">
+          Clear All
+        </Button>
+      </Flex>
+    </Box>
+  );
+}
 
-        </div>
-    )
-  }
-
-  export default Search
+export default Search;

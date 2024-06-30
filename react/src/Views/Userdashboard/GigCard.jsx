@@ -12,6 +12,7 @@ const JobCard = ({ job }) => {
         src={`${import.meta.env.VITE_API_BASE_URL}/images/${job.img}`}
         alt={job.title}
       />
+      {job.img}
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{job.title}</div>
         <p className="text-gray-700 text-base">{job.description}</p>

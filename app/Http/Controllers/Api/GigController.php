@@ -11,26 +11,85 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class GigController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Eager load the 'user' relationship and filter by user ID
-        $userId= Auth::id();
-        $gigs = Gig::with('user')
-                   ->where('user_id', $userId)
-                   ->get();
-
-        return response()->json($gigs);
+        $userId = Auth::id();
+        $perPage = 10;
+    
+        $query = Gig::with('user', 'user.profiles');
+                   
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%$search%")
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'like', "%$search%");
+                  });
+            });
+        }
+    
+            
+                $gigs = $query->simplePaginate($perPage);
+            
+    
+                   $formattedGigs = $gigs->items();
+                   $formattedGigs = array_map(function ($gig) {
+                       return [
+                           'id' => $gig->id,
+                           'gigname' => $gig->title,
+                           'image' => $gig->img,
+                           'freelancerImage' => optional($gig->user->profile)->profile_pic ?? null,
+                           'freelancerName' => $gig->user->name,
+                           'desc' => $gig->description,
+                       ];
+                   }, $formattedGigs);
+      
+        
+    
+        return response()->json([
+            'gigs' => $formattedGigs,
+            'currentPage' => $gigs->currentPage(),
+          
+        ]);
     }
-    public function getUserGigs($userId)
+    public function giginfo($userId)
+    {
+        try {
+            // Fetch gigs associated with the user
+            $gigs = Gig::where('user_id', $userId)->get();
+
+            // Check if gigs exist for the user
+            if ($gigs->isEmpty()) {
+                return response()->json([
+                    'message' => 'No gigs found for this user.',
+                ], 404);
+            }
+
+            // Return the gigs as JSON response
+            return response()->json($gigs, 200);
+        } catch (\Exception $e) {
+            // Handle any potential errors
+            return response()->json([
+                'message' => 'Error fetching gigs.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getUserGigs()
     {
         // Fetch gigs for the user
-        $gigs = Gig::where('user_id', $userId)->get();
+        $user = Auth::user();
 
-        if ($gigs->isEmpty()) {
-            return response()->json(['error' => 'No gigs found for this user'], 404);
-        }
+        // Get the gigs created by the user
+        $gigs = $user->gigs;
 
-        return response()->json($gigs);
+        // Return the gigs
+        return response()->json([
+            'gigs' => $gigs,
+            'userId' =>$user->id
+        ]);
     }
 
     public function store(Request $request)
@@ -47,8 +106,10 @@ class GigController extends Controller
         $job->user_id = $request->user()->id; // Use authenticated user's ID
 
         if ($request->hasFile('img')) {
-            $imagePath = $request->file('img')->store('images', 'public');
-            $job->img = $imagePath;
+            $imagePath = $request->file('img');
+            $imageName= time().'.' . $imagePath->getClientOriginalExtension();
+            $imagePath->move(public_path('images'),$imageName);
+            $job->img = $imageName;
         }
 
         $job->save();

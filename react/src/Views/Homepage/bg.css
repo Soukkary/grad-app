@@ -1,0 +1,28 @@
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to right, #4a90e2, #000000);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: none; /* Hide the default cursor */
+  }
+  
+  .spotlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    transition: transform 0.05s, opacity 0.5s;
+    opacity: 0.8;
+    filter: blur(20px); /* Blur to create the light trail effect */
+  }
+  

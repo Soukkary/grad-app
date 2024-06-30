@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import 'tailwindcss/tailwind.css';
 import { FaSearch, FaProjectDiagram, FaUserTie, FaComments, FaRobot } from 'react-icons/fa';
 
+import { useNavigate } from 'react-router-dom';
+
+
 const Navbar = () => {
   const [selectedTab, setSelectedTab] = useState(null);
 
@@ -53,9 +56,20 @@ const Navbar = () => {
     </nav>
   );
 };
+// src/components/HeroSection.jsx
+
+
 
 const HeroSection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/job-search?search=${searchQuery.trim()}`);
+    }
+  };
 
   return (
     <section className="relative bg-gray-800 text-white h-screen flex items-center justify-center">
@@ -94,21 +108,34 @@ const HeroSection = () => {
               <FaSearch />
             </motion.div>
           ) : (
-            <motion.input 
+            <motion.div 
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: '100%', opacity: 1, scale: [0.8, 1] }}
               transition={{ duration: 0.5, bounce: 0.3 }}
-              type="text" 
-              placeholder="Search for projects, freelancers, etc..." 
-              className="w-full p-4 rounded-full text-black outline-none"
-              onBlur={() => setIsExpanded(false)}
-            />
+              className="flex items-center"
+            >
+              <input 
+                type="text" 
+                placeholder="Search for projects, freelancers, etc..." 
+                className="w-full p-4 rounded-full text-black outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                onBlur={() => setIsExpanded(false)}
+              />
+              <button onClick={handleSearch} className="p-4 bg-blue-500 text-white rounded-full ml-2">
+                <FaSearch />
+              </button>
+            </motion.div>
           )}
         </motion.div>
       </div>
     </section>
   );
 };
+
+
+
 
 const Section = ({ title, description, image, icon: Icon, bgColor }) => (
   <section className={`py-20 ${bgColor}`}>

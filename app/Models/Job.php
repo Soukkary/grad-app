@@ -10,6 +10,7 @@ class Job extends Model
     use HasFactory;
 
     protected $fillable = [
+<<<<<<< Updated upstream
         'user_id',
         'title',
         'description',
@@ -19,3 +20,12 @@ class Job extends Model
         'img',
     ];
 }
+=======
+        'title',
+        'description',
+        'organization_name',
+        'level',
+        'job_type',
+    ];
+}
+>>>>>>> Stashed changes
