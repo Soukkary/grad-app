@@ -5,7 +5,7 @@ import axios from "axios";
 import { saveChat, getChatHistory } from '../../Services/ChatbotService';
 import ChatbotSidebar from "../../Components/sidebar/ChatbotSidebar";
 
-const API_KEY = "sk-blueprint-6IuUBM8mTPt09m9ffNAYT3BlbkFJQmGl6Fj2xOr3fGLXlO4H";
+//const API_KEY = "sk-blueprint-6IuUBM8mTPt09m9ffNAYT3BlbkFJQmGl6Fj2xOr3fGLXlO4H";
 
 function ChatBot() {
     const [typing, setTyping] = useState(false);
