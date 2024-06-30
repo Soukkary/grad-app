@@ -4,7 +4,9 @@ import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Typin
 import axios from "axios";
 import { saveChat, getChatHistory } from '../../Services/ChatbotService';
 import ChatbotSidebar from "../../Components/sidebar/ChatbotSidebar";
+import { env } from "process";
 
+const API_KEY = env('OPENAI_API_KEY');
 
 function ChatBot() {
     const [typing, setTyping] = useState(false);
