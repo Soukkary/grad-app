@@ -7,10 +7,13 @@ import {
   Stack,
   Flex,
   Text,
+  FormControl,
+  FormLabel,
   Container,
   Avatar,
   Button,
   Textarea,
+  IconButton,
   TabList,
   TabPanels,
   TabPanel,
@@ -18,12 +21,23 @@ import {
   Tabs,
   Spacer,
   useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Input,
+  Select,
+  useToast,
 } from '@chakra-ui/react';
+import { MinusIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 import axiosClient from './axios-client';
 import Pusher from 'pusher-js';
-
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const PCHPage = () => {
   const { projectId } = useParams();
@@ -31,10 +45,27 @@ const PCHPage = () => {
   const [projectmanager, setProjectManager] = useState([]);
   const [selectedTab, setSelectedTab] = useState('Team Overview');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [assignmentFields, setAssignmentFields] = useState([]);
+  const [deadline, setDeadline] = useState(null);
+  const [taskDescription, setTaskDescription] = useState(null);
+  const[livetask,setlivetask]=useState([]);
+  const [completedTasks, setcompletedTasks] = useState([]);
 
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await axiosClient.get(`/project/PCH/${projectId}/team`);
+        setTeamMembers(response.data);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      }
+    };
 
-
+    fetchTeamMembers();
+  }, [projectId]);
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -42,10 +73,6 @@ const PCHPage = () => {
         const response = await axiosClient.get(`projects/${projectId}`);
         setProject(response.data.projectname);
         setProjectManager(response.data.managerId);
-        
-        
-        console.log(projectmanager);
-        console.log(project);
       } catch (error) {
         console.error('Error fetching project data:', error);
       }
@@ -54,32 +81,60 @@ const PCHPage = () => {
     fetchProjectData();
   }, [projectId]);
 
-  // Dummy data for now, replace it with the fetched data
-  const teamMembers = [
-    { name: 'Alice Smith', role: 'Project Manager', contact: 'alice@example.com' },
-    { name: 'Bob Johnson', role: 'Developer', contact: 'bob@example.com' },
-    // Add more team members as needed
-  ];
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axiosClient.get(`/projects/${projectId}/tasks`);
+        const pendingTasks = response.data.filter(task => task.status === 'pending');
+        const donetasks = response.data.filter(task => task.status !== 'pending');
+        setTasks(pendingTasks);
+        setcompletedTasks(donetasks);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
 
-  const tasks = [
-    { description: 'Develop homepage', deadline: '2024-07-01', assignee: 'Bob Johnson' },
-    // Add more tasks as needed
-  ];
+    fetchTasks();
+  }, [projectId]);
+  useEffect(() => {
+  const pusher = new Pusher('8a351db698a9f6549807', {
+    cluster: 'mt1',
+    encrypted: true,
+  });
 
-  const completedTasks = [
-    { description: 'Setup project repository', completionDate: '2024-06-15', contributors: 'Alice Smith' },
-    // Add more completed tasks as needed
-  ];
+  const channel = pusher.subscribe(`project.${projectId}`);
+  channel.bind('App\\Events\\TaskEvent', (data) => {
+    setlivetask((prevTasks) => [
+      ...prevTasks,
+      {
+        id: data.taskId,
+        description: data.description,
+        due_date: data.dueDate,
+        users: data.userName.map((name, index) => ({ id: data.userId[index], name })),
+      },
+    ]);
+  });
+  console.log(livetask);
+
+  return () => {
+    channel.unbind_all();
+    channel.unsubscribe();
+    pusher.disconnect();
+  };
+}, [projectId]);
+    
+
+  
+
+
 
   const projectGoals = [
     'Goal 1: Complete the project on time',
     'Goal 2: Maintain quality standards',
-    // Add more goals as needed
   ];
 
   const documents = [
     { name: 'Project Plan', link: '/docs/project-plan.pdf' },
-    // Add more documents as needed
   ];
 
   const handlePostUpdate = () => {
@@ -90,9 +145,58 @@ const PCHPage = () => {
     // Handle adding note
   };
 
+  const openTaskModal = () => {
+    setIsTaskModalOpen(true);
+  };
+
+  const closeTaskModal = () => {
+    setIsTaskModalOpen(false);
+  };
+
+  const addAssignmentField = () => {
+    setAssignmentFields([...assignmentFields, {}]);
+  };
+
+  const handleAssignmentChange = (index, value) => {
+    const updatedFields = [...assignmentFields];
+    updatedFields[index] = value;
+    setAssignmentFields(updatedFields);
+  };
+
+  const handleRemoveAssignment = (index) => {
+    const updatedFields = [...assignmentFields];
+    updatedFields.splice(index, 1);
+    setAssignmentFields(updatedFields);
+  };
+
+  const createTask = async () => {
+    try {
+      console.log(deadline);
+      const taskData = {
+        description: taskDescription,
+        dueDate: deadline.toISOString(),
+        user_id: assignmentFields, // Collecting user IDs from the assignment fields
+        project_id: projectId,
+      };
+
+      const response = await axiosClient.post(`/projects/${projectId}/tasks`, taskData);
+     
+    
+      console.log('Task created:', response.data);
+      
+
+        
+        closeTaskModal()
+        
+
+      ; // Close modal after successful creation
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
+  };
+  
   return (
     <>
-      {/* Cool and Elegant Navbar */}
       <Container maxW="container.xl" p={8}>
         <motion.div
           initial={{ backdropFilter: 'blur(0px)' }}
@@ -121,9 +225,7 @@ const PCHPage = () => {
           </Box>
         </motion.div>
 
-        {/* Main Content */}
         <Flex ml={-260} mt={20} borderWidth="1px" borderRadius="md" boxShadow="lg" p={4} w="150vh" h="80vh">
-          {/* Vertical Tabs */}
           <Tabs orientation="vertical" onChange={(index) => setSelectedTab(index)} flex={1}>
             <TabList marginTop={100}>
               <Tab>
@@ -196,8 +298,28 @@ const PCHPage = () => {
 
               <TabPanel>
                 <Section title="Task Management">
+                  <Button colorScheme="blue" onClick={openTaskModal}>
+                    Create Task
+                  </Button>
                   <Stack spacing={4}>
                     {tasks.map((task, index) => (
+                      <TaskItem key={index} task={task} />
+                    ))}
+                  </Stack>
+                  {
+                  <Stack spacing={4}>
+                    {livetask.map((task, index) => (
+                      <TaskItem key={index} task={task} />
+                    ))}
+                  </Stack>
+}
+                </Section>
+              </TabPanel>
+
+              <TabPanel>
+                <Section title="Completed Tasks">
+                <Stack spacing={4}>
+                    {completedTasks.map((task, index) => (
                       <TaskItem key={index} task={task} />
                     ))}
                   </Stack>
@@ -205,33 +327,14 @@ const PCHPage = () => {
               </TabPanel>
 
               <TabPanel>
-                <Section title="Completed Tasks">
-                  <Stack spacing={4}>
-                    {completedTasks.map((task, index) => (
-                      <Box key={index} p={4} shadow="md" borderWidth="1px">
-                        <Text fontWeight="bold">{task.description}</Text>
-                        <Text>Completion Date: {task.completionDate}</Text>
-                        <Text>Contributors: {task.contributors}</Text>
-                      </Box>
-                    ))}
-                  </Stack>
-                </Section>
-              </TabPanel>
-
-              <TabPanel>
                 <Section title="Project Timeline">
-                  <Box>
-                    {/* Implement visual timeline or Gantt chart here */}
-                    <Text>Project timeline will be displayed here.</Text>
-                  </Box>
+                  <Text>Timeline content goes here...</Text>
                 </Section>
               </TabPanel>
 
               <TabPanel>
                 <Section title="Financial Tracking">
-                  <Box>
-                    <Text>Project budget and expenses will be displayed here.</Text>
-                  </Box>
+                  <Text>Financial tracking content goes here...</Text>
                 </Section>
               </TabPanel>
 
@@ -252,8 +355,10 @@ const PCHPage = () => {
                   <Stack spacing={4}>
                     {documents.map((doc, index) => (
                       <Box key={index} p={4} shadow="md" borderWidth="1px">
-                        <Text as="a" href={doc.link} color="blue.500">
-                          {doc.name}
+                        <Text>
+                          <a href={doc.link} target="_blank" rel="noopener noreferrer">
+                            {doc.name}
+                          </a>
                         </Text>
                       </Box>
                     ))}
@@ -263,145 +368,157 @@ const PCHPage = () => {
 
               <TabPanel>
                 <Section title="Progress Updates">
-                  <Stack spacing={4}>
-                    <Box>
-                      <Textarea placeholder="Post an update..." />
-                      <Button mt={2} colorScheme="blue" onClick={handlePostUpdate}>
-                        Post Update
-                      </Button>
-                    </Box>
-                    {/* Display past updates here */}
-                  </Stack>
+                  <Textarea placeholder="Post an update..." />
+                  <Button mt={2} colorScheme="blue" onClick={handlePostUpdate}>
+                    Post Update
+                  </Button>
                 </Section>
               </TabPanel>
 
               <TabPanel>
                 <Section title="Manager's Notes">
-                  <Stack spacing={4}>
-                    <Box>
-                      <Textarea placeholder="Add a note..." />
-                      <Button mt={2} colorScheme="blue" onClick={handleAddNote}>
-                        Add Note
-                      </Button>
-                    </Box>
-                    {/* Display past notes here */}
-                  </Stack>
+                  <Textarea placeholder="Add a note..." />
+                  <Button mt={2} colorScheme="blue" onClick={handleAddNote}>
+                    Add Note
+                  </Button>
                 </Section>
               </TabPanel>
             </TabPanels>
           </Tabs>
         </Flex>
+
+        <Modal isOpen={isTaskModalOpen} onClose={closeTaskModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Create Task</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl id="taskDescription">
+                <FormLabel>Task Description</FormLabel>
+                <Textarea
+                  value={taskDescription}
+                  onChange={(e) => setTaskDescription(e.target.value)}
+                />
+              </FormControl>
+
+              <FormControl id="taskDeadline" mt={4}>
+                <FormLabel>Deadline</FormLabel>
+                <DatePicker
+                  selected={deadline}
+                  onChange={(date) => setDeadline(date)}
+                  showTimeSelect
+                  dateFormat="Pp"
+                />
+              </FormControl>
+
+              <FormControl id="taskAssignment" mt={4}>
+                <FormLabel>Assign to Team Members</FormLabel>
+                {assignmentFields.map((field, index) => (
+                  <Flex key={index} mb={2}>
+                    <Select
+                      placeholder="Select team member"
+                      value={field.value}
+                      onChange={(e) => handleAssignmentChange(index, e.target.value)}
+                    >
+                      {teamMembers.map((member) => (
+                        <option key={member.id} value={member.id}>
+                          {member.name}
+                        </option>
+                      ))}
+                    </Select>
+                    <IconButton
+                      aria-label="Remove assignment"
+                      icon={<MinusIcon />}
+                      ml={2}
+                      onClick={() => handleRemoveAssignment(index)}
+                    />
+                  </Flex>
+                ))}
+                <Button mt={2} colorScheme="blue" onClick={addAssignmentField}>
+                  Add Assignment
+                </Button>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={createTask}>
+                Create Task
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Container>
-
-      {/* Footer Section */}
-      <Box mt={4} p={4} bg="gray.100" borderRadius="md">
-        <Container maxW="container.xl">
-          <Stack direction="row" spacing={8} align="center">
-            <Box flex={1}>
-              <Heading as="h3" size="md">
-                Footer Content
-              </Heading>
-              <Text mt={2}>
-                This is the footer section. Add your content here. You can include links,
-                important notices, or any additional information.
-              </Text>
-              <Stack direction="row" spacing={4} mt={4}>
-                <Button colorScheme="blue">Contact Us</Button>
-                <Button colorScheme="blue">Privacy Policy</Button>
-                {/* Add more buttons or links as needed */}
-              </Stack>
-            </Box>
-            <Spacer />
-            <Box>
-              <Stack spacing={4}>
-                <Text fontWeight="bold">Company Name</Text>
-                <Text>Address: 123 Main Street, City, Country</Text>
-                <Text>Email: info@example.com</Text>
-                <Text>Phone: +1234567890</Text>
-                {/* Add more company information */}
-              </Stack>
-            </Box>
-          </Stack>
-        </Container>
-      </Box>
-
       <AddDeveloperModal isOpen={isOpen} onClose={onClose} projectId={projectId} projectmanager={projectmanager} />
     </>
   );
 };
 
 const Section = ({ title, children }) => (
-  <Box>
-    <Heading as="h2" size="lg" color="blue.500" mb={4}>
+  <Box mt={8}>
+    <Heading as="h3" size="lg" mb={4}>
       {title}
     </Heading>
-    <Divider mb={4} />
     {children}
   </Box>
 );
 
-const TeamMember = ({ member }) => {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-    >
-      <Flex key={member.name} align="center" p={2} borderRadius="md" _hover={{ bg: 'gray.100' }}>
-        <Avatar name={member.name} />
-        <Box ml={3}>
-          <Text fontWeight="bold">{member.name}</Text>
-          <Text>{member.role}</Text>
-          <Text>{member.contact}</Text>
-        </Box>
-      </Flex>
-    </motion.div>
-  );
-};
-
-const TaskItem = ({ task }) => {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-    >
-      <Box key={task.description} p={4} shadow="md" borderWidth="1px" _hover={{ bg: 'gray.100' }}>
-        <Text fontWeight="bold">{task.description}</Text>
-        <Text>Deadline: {task.deadline}</Text>
-        <Text>Assignee: {task.assignee}</Text>
-      </Box>
-    </motion.div>
-  );
-};
-
 const TeamOverview = ({ projectId, onOpen }) => {
+  const [projectManager, setProjectManager] = useState('');
+  const [teamMembers, setTeamMembers] = useState([]);
+
+  
+
   return (
-    <Box>
-      <Heading as="h3" size="lg" mb={4}>Team Overview</Heading>
-      <Button colorScheme="blue" onClick={onOpen}>Add Developer</Button>
-    </Box>
+    <Stack spacing={4}>
+      <Box p={4} shadow="md" borderWidth="1px">
+        <Text fontWeight="bold">Project Manager: {projectManager}</Text>
+        <Button mt={2} colorScheme="blue" onClick={onOpen}>
+          Add Member
+        </Button>
+      </Box>
+      {teamMembers.map((member, index) => (
+        <TeamMember key={index} member={member} />
+      ))}
+    </Stack>
   );
 };
+
+const TeamMember = ({ member }) => (
+  <Box p={4} shadow="md" borderWidth="1px">
+    <Flex align="center">
+      <Avatar name={member.name} src={member.avatarUrl} />
+      <Box ml={4}>
+        <Text fontWeight="bold">{member.name}</Text>
+        <Text>{member.role}</Text>
+      </Box>
+    </Flex>
+  </Box>
+);
+
+const TaskItem = ({ task }) => (
+  <Box p={4} shadow="md" borderWidth="1px">
+    <Text fontWeight="bold">{task.description}</Text>
+    <Text>Due Date: {task.due_date}</Text>
+    <Text>
+      Assigned to:{' '}
+      {task.users.map((user, index) => (
+        <React.Fragment key={user.id}>
+          {user.name}
+          {index < task.users.length - 1 ? ', ' : ''}
+        </React.Fragment>
+      ))}
+    </Text>
+  </Box>
+);
 
 export default PCHPage;
+
+
+
+
+
 // AddDeveloperModal.jsx
 
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  
-  
 
-  
-  
-  useToast
-} from '@chakra-ui/react';
 import NotificationListener from './NotificationListener';
 
 

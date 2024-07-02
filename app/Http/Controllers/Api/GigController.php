@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class GigController extends Controller
 {
+    public function showgiginfo($id)
+    {
+        $gig = Gig::with('user')->find($id);
+
+        if (!$gig) {
+            return response()->json(['message' => 'Gig not found'], 404);
+        }
+
+        return response()->json($gig, 200);
+    }
     public function index(Request $request)
     {
         // Eager load the 'user' relationship and filter by user ID

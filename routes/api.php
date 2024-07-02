@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\GigController;
 use App\Http\Controllers\Api\ProfileformController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\TaskController;
 use Illuminate\Support\Facades\Auth;
 
 use Pusher\Pusher;
@@ -92,13 +93,19 @@ Route::get('/user/projects', [ProjectController::class, 'userProjects'])->middle
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/creategig', [GigController::class, 'store']);
     Route::post('projects/{projectId}/add-developer-request', [ProjectController::class, 'addDeveloperRequest']);
+    Route::get('project/PCH/{projectId}/team', [ProjectController::class, 'getTeamMembers']);
     Route::get('/user-requests', [ProjectDeveloperRequestController::class, 'getUserRequests']);
-    Route::post('/projects/{project}/accept-developer-request', [ProjectController::class, 'acceptRequest']);
+    Route::post('/projects/{project}/{developer}/accept-developer-request', [ProjectController::class, 'acceptRequest']);
     Route::post('/projects/{project}/{developer}/decline-developer-request', [ProjectController::class, 'declineRequest']);
-    Route::post('/createprofile',[GigController::class,'storeP']);
+    Route::post('/createprofile',[GigController::class,'storeP']); 
     Route::get('/usergigs', [GigController::class, 'getUserGigs']);
     Route::get('/messages/{recipientId}', [MessageController::class, 'fetchMessages']);
+    Route::get('/projects/{projectId}/tasks', [TaskController::class, 'index']);
+    Route::post('/projects/{projectId}/tasks', [TaskController::class, 'store']);
+    Route::put('/projects/{projectId}/tasks/{task}', [TaskController::class, 'update']);
     Route::post('/messages', [MessageController::class, 'sendMessage']);
+    Route::get('/gigs/{id}', [GigController::class, 'showgiginfo']);
+    
 });
 Route::get('/gigs', [GigController::class, 'index']);
 Route::get('/usergigs/{userId}', [GigController::class, 'giginfo']);

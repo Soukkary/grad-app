@@ -16,6 +16,22 @@ use function PHPSTORM_META\map;
 
 class ProjectController extends Controller
 {
+
+    public function getTeamMembers($projectId)
+    {
+        $project = Project::with('users.profiles') // Eager load users and their profiles
+            ->where('id', $projectId)
+            ->first();
+
+        if (!$project) {
+            return response()->json(['message' => 'Project not found'], 404);
+        }
+
+        // Extract users and their profiles
+        $teamMembers = $project->users;
+
+        return response()->json($teamMembers);
+    }
     // show project details in pch 
     public function show($id)
     {

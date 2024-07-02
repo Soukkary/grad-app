@@ -81,6 +81,10 @@ class User extends Authenticatable implements CanResetPassword
                     ->using(ProjectUser::class)
                     ->withTimestamps();
     }
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_user', 'user_id', 'task_id');
+    }
     
     public function sentMessages()
     {

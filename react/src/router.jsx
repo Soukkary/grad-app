@@ -23,6 +23,10 @@ import { ChatIcon } from "@chakra-ui/icons";
 import ForgotPassword from "./Views/ForgetPassword.jsx";
 import ChatbotPage from "./Views/Chatbot/azure.jsx";
 import ResetPassword from "./Views/resetpassword.jsx";
+import Gigs from "./Views/Userdashboard/Gigs.jsx";
+import GigSearch from "./Views/JobSearch/GigSearch.jsx";
+
+
 const ProtectedRoute = ({ element }) => {
     const { token } = useStateContext();
     return token ? element : <Navigate to="/login" />;
@@ -50,6 +54,11 @@ const router = createBrowserRouter([
             element:<Jobs/>
         },
         {
+            path:'/gigs',
+            element:<Gigs></Gigs>
+        },
+        
+        {
             path:'/home',
             element:<HomePage/>
         },
@@ -57,18 +66,12 @@ const router = createBrowserRouter([
             path:'/profilepage/:userId',
             element:<ProfilePage/>
         },
-        {
-            path: '/job-search',
-            element: <JobSearch/>
-            },
+        
             {
             path: '/job-portal',
             element: <JobPortal/>
             },
-            {
-                path: '/PCH',
-                element:<ProjectCollaborationHub></ProjectCollaborationHub>
-            }
+            
             ,
             {
                 path:"/profileform",
@@ -96,11 +99,16 @@ const router = createBrowserRouter([
                     path:'project/PCH/:projectId',
                     element:<ProjectCollaborationHub></ProjectCollaborationHub>
                 },
+                {
+                    path:'gig-search',
+                    element:<GigSearch></GigSearch>
+                },
+                
                 
 
 
             {
-            path: 'gig-info',
+            path: 'gig-info/:id',
             element: <GigInfo />
             },
             {
@@ -110,7 +118,8 @@ const router = createBrowserRouter([
             {
             path: "/auth/google",
             element: <GoogleLoginButton />
-            }
+            },
+            
     ]
    }
    ,

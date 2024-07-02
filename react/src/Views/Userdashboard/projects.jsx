@@ -275,7 +275,7 @@ function Projects() {
 
   const handleAcceptRequest = async (projectId, developerId) => {
     try {
-      await axiosClient.post(`/projects/${projectId}/accept-developer-request`, { 
+      await axiosClient.post(`/projects/${projectId}/${developerId}/accept-developer-request`, { 
         developerId: developerId,
          projectId:projectId 
       });

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Broadcast;
 use app\Models\Message;
+use app\Models\Project;
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -34,5 +35,11 @@ Broadcast::channel('developer.{developerId}', function ($user, $developerId) {
 Broadcast::channel('manager.{managerId}', function ($user, $managerId) {
   // Allow authenticated user to subscribe to private channel for specific managerId
   return (int) $user->id === (int) $managerId;
+});
+Broadcast::channel('project.{projectId}', function ($user, $projectId) {
+     // Check if the user is authorized to listen to the channel
+    // Logic to check if the user is the project manager or assigned to the project
+
+   return true;
 });
 
