@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const {nextui} = require("@nextui-org/react");
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -6,9 +7,10 @@ module.exports = {
     './components/**/*.{js,jsx}',
     './app/**/*.{js,jsx}',
     './src/**/*.{js,jsx}',
-    "./src/**/*.{html,js}", 
+    "./src/**/*.{html,js}",
+    "./node_modules/@nextui-org/theme/**/*.{js,ts,jsx,tsx}"
 
-    
+
   ],
   prefix: "",
   theme: {
@@ -19,8 +21,13 @@ module.exports = {
         "2xl": "1400px",
       },
     },
+    
     extend: {
       colors: {
+        'blueColor' : '#2a68ff',
+            'greyIsh' : '#f1f4f8',
+            'cardShadow' : '#f7f8f9',
+            'textColor' : '#252b36',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -54,6 +61,26 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'blueColor' : '#2a68ff',
+        'greyIsh' : '#f1f4f8',
+        'cardShadow' : '#f7f8f9',
+        'textColor' : '#252b36',
+      },
+      flex: {
+        '2': '2 2 0%',
+      },
+      spacing: {
+        '20': '5rem',
+      },
+      height:{
+        '100': '25rem',   // 400px
+        '104': '26rem',   // 416px
+        '108': '27rem',   // 432px
+        '112': '28rem', 
+        '128': '32rem',  // 512px
+        '144': '36rem',  // 576px
+        '160': '40rem',  // 640px
+        '192': '48rem',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -76,5 +103,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins:[nextui()],
 }

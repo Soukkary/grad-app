@@ -13,71 +13,41 @@ use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
-    /**
-     * Display a listing of the jobs.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function create(Request $request)
     {
-        // Retrieve all jobs
-        $jobs = Job::all();
-        return view('jobs.index', ['jobs' => $jobs]);
-    }
-
-    /**
-     * Show the form for creating a new job.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('jobs.create');
-    }
-
-    /**
-     * Store a newly created job in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function createjob(Request $request)
-    {
-        // Validate request data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'orgName' => 'required|string',
+            'level' => 'required|string',
+            'job_type' => 'required|string',
+            'img' => 'nullable|image',
         ]);
 
-        // Create a new job instance
+        // Create a new job record
         $job = new Job();
-        $job->title = $request->title;
-        $job->description = $request->description;
-        // Associate job with authenticated user
+        $job->title = $validatedData['title'];
+        $job->description = $validatedData['description'];
+        $job->orgName = $validatedData['orgName'];
+        $job->level = $validatedData['level'];
+        $job->job_type = $validatedData['job_type'];
+        // Handle image upload
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $job->img = $imageName;
+        }
         $job->save();
 
-        // Redirect to a route or return a response
-        return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
+        return response()->json(['message' => 'Job created successfully', 'job' => $job], 201);
     }
 
-    /**
-     * Remove the specified job from storage.
-     *
-     * @param  \App\Models\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Job $job)
+    public function index()
     {
-        // Check if the authenticated user is authorized to delete the job
-        if (Auth::id() !== $job->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to delete this job.');
-        }
-
-        // Delete the job
-        $job->delete();
-
-        // Redirect to a route or return a response
-        return redirect()->route('jobs.index')->with('success', 'Job deleted successfully.');
+        $jobs = Job::all();
+        return response()->json($jobs);
     }
 }
 

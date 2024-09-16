@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userr', function (Blueprint $table) {
+        Schema::create('chat_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
-            $table->string('role');
-
-
+            $table->unsignedBigInteger('user_id');
+            $table->text('message');
+            $table->text('response');
             $table->timestamps();
+            // Define the foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userr');
+        Schema::dropIfExists('chat_histories');
     }
 };

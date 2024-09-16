@@ -5,8 +5,32 @@ import Guest from "./Components/Guest.jsx";
 import Login from "./Views/Login.jsx";
 import Dash from "./Views/Userdashboard/Dash.jsx";
 import Jobs from "./Views/Userdashboard/Jobs.jsx";
+import JobSearch from "./Views/JobSearch/GigSearch.jsx";
+import GigInfo from "./Views/JobSearch/GigInfo.jsx";
+import GoogleLoginButton from "./Components/GoogleLoginButton.jsx";
+import JobPortal from "./Views/JobPortal/JobPortal.jsx";
+import ChatBot from "./Views/Chatbot/ChatBot.jsx";
 import "./index.css";
+import Notifications from "./Views/Userdashboard/Notifications.jsx";
+import ProfilePage from "./Views/Profile.jsx";
+import ProjectCollaborationHub from "./Views/PCH.jsx";
+import HomePage from "./Views/Homepage/Homepage.jsx";
+import ProfileForm from "./Views/ProfileForm.jsx";
+import { useStateContext } from './Contexts/ContextProvider';
+import Projects from "./Views/Userdashboard/projects.jsx";
+import App from "./Views/Chatbot/azure.jsx";
+import { ChatIcon } from "@chakra-ui/icons";
+import ForgotPassword from "./Views/ForgetPassword.jsx";
+import ChatbotPage from "./Views/Chatbot/azure.jsx";
+import ResetPassword from "./Views/resetpassword.jsx";
+import Gigs from "./Views/Userdashboard/Gigs.jsx";
+import GigSearch from "./Views/JobSearch/GigSearch.jsx";
 
+
+const ProtectedRoute = ({ element }) => {
+    const { token } = useStateContext();
+    return token ? element : <Navigate to="/login" />;
+};
 const router = createBrowserRouter([
    {
     path: '/',
@@ -28,10 +52,74 @@ const router = createBrowserRouter([
            {
             path:'/jobs',
             element:<Jobs/>
-        }
+        },
+        {
+            path:'/gigs',
+            element:<Gigs></Gigs>
+        },
+        
+        {
+            path:'/home',
+            element:<HomePage/>
+        },
+        {
+            path:'/profilepage/:userId',
+            element:<ProfilePage/>
+        },
+        
+            {
+            path: '/job-portal',
+            element: <JobPortal/>
+            },
+            
+            ,
+            {
+                path:"/profileform",
+                element:<ProfileForm />
+            },
+            {
+                path:"/projects",
+                element:<Projects />
+            },
+            {
+                path:"/azure",
+                element:<ChatbotPage />
+            },
+            {
+                path:"/forget-password",
+                element: <ForgotPassword></ForgotPassword>
+            },
+                {
+                    path:"/reset-password/:token", 
+                    element:<ResetPassword/>
+            
+
+                },
+                {
+                    path:'project/PCH/:projectId',
+                    element:<ProjectCollaborationHub></ProjectCollaborationHub>
+                },
+                {
+                    path:'gig-search',
+                    element:<GigSearch></GigSearch>
+                },
+                
+                
 
 
-
+            {
+            path: 'gig-info/:id',
+            element: <GigInfo />
+            },
+            {
+            path: '/chatbot',
+            element: <ChatBot/>
+            },
+            {
+            path: "/auth/google",
+            element: <GoogleLoginButton />
+            },
+            
     ]
    }
    ,
@@ -41,5 +129,6 @@ const router = createBrowserRouter([
    },
 
 
-])
+]
+)
 export default router;

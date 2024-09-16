@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -21,7 +23,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\Cors::class,
+        \App\Http\Middleware\Cors::class
+        
 
     ];
 
@@ -38,12 +41,20 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ],
 
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+        'throttle:api',
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Http\Middleware\HandleCors::class,
+            
+            \Illuminate\Session\Middleware\StartSession::class, // Add this for session support
+            \App\Http\Middleware\Cors::class, // Ensure CORS middleware is applied
         ],
 
         'admin' => [
@@ -53,9 +64,19 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ],
+        
+        
     ];
-
+    protected $routeMiddleware = [
+        // Other middleware...
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
+       'cors'=> \App\Http\Middleware\Cors::class
+    ];
+    
     /**
      * The application's middleware aliases.
      *

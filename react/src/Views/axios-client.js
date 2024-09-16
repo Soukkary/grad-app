@@ -1,7 +1,12 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`
+    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+    headers: {
+        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+      },
 });
 
 axiosClient.interceptors.request.use(async (config) => {
@@ -9,7 +14,7 @@ axiosClient.interceptors.request.use(async (config) => {
     const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/sanctum/csrf-cookie`);
     // Include CSRF token in the headers
     config.headers['X-XSRF-TOKEN'] = response.data.csrf_token;
-    
+
     // Include authorization token if available
     const token = localStorage.getItem('ACCESS_TOKEN');
     if (token) {
